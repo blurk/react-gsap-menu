@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { gsap } from 'gsap';
 
-import dallas from '../images/dallas.webp';
+import danang from '../images/danang.webp';
 import newyork from '../images/newyork.webp';
-import beijing from '../images/beijing.webp';
-import austin from '../images/austin.webp';
-import sanfrancisco from '../images/sanfrancisco.webp';
+import hanoi from '../images/hanoi.webp';
+import phuquoc from '../images/phuquoc.webp';
+import hcm from '../images/hcm.webp';
 
 import {
 	staggerText,
@@ -23,11 +22,11 @@ import {
 } from '../utils/animations';
 
 const CITIES = [
-	{ name: 'Dallas', image: dallas },
-	{ name: 'Austin', image: austin },
+	{ name: 'Da Nang', image: danang },
+	{ name: 'Ha Noi', image: hanoi },
 	{ name: 'New york', image: newyork },
-	{ name: 'Beijing', image: beijing },
-	{ name: 'Sanfrancisco', image: sanfrancisco }
+	{ name: 'Ho Chi Minh City', image: hcm },
+	{ name: 'Phu Quoc', image: phuquoc }
 ];
 
 const LINKS = [
