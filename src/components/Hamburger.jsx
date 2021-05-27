@@ -1,29 +1,88 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { gsap } from 'gsap';
 
-export default function Hamburger() {
+import dallas from '../images/dallas.webp';
+import newyork from '../images/newyork.webp';
+import beijing from '../images/beijing.webp';
+import austin from '../images/austin.webp';
+import sanfrancisco from '../images/sanfrancisco.webp';
+
+import {
+	staggerText,
+	fadeInUp,
+	staggerReveal,
+	hideMenu,
+	hideMenuBackgrounds,
+	revealMenu as revealMenuFn,
+	revealMenuBackgrounds,
+	hanldeLinkHoverExit,
+	hanldeLinkHover,
+	handleCityEnter,
+	handleCityOut
+} from '../utils/animations';
+
+const CITIES = [
+	{ name: 'Dallas', image: dallas },
+	{ name: 'Austin', image: austin },
+	{ name: 'New york', image: newyork },
+	{ name: 'Beijing', image: beijing },
+	{ name: 'Sanfrancisco', image: sanfrancisco }
+];
+
+const LINKS = [
+	{ name: 'Oppoturnities', to: '/opportunities' },
+	{ name: 'Solutions', to: '/solutions' },
+	{ name: 'Contact', to: '/contact-us' }
+];
+
+export default function Hamburger({ state }) {
+	let menu = useRef(null);
+	let revealMenu = useRef(null);
+	let revealMenuBackground = useRef(null);
+	let info = useRef(null);
+
+	useEffect(() => {
+		if (state.clicked === false) {
+			hideMenuBackgrounds(revealMenu, revealMenuBackground);
+			hideMenu(menu);
+		} else if (
+			state.clicked === true ||
+			(state.clicked === true && state.initial === null)
+		) {
+			revealMenuFn(menu);
+			revealMenuBackgrounds(revealMenuBackground, revealMenu);
+			staggerReveal(revealMenuBackground, revealMenu);
+			fadeInUp(info);
+			staggerText('.line1', '.line2', '.line3');
+		}
+	}, [state]);
+
 	return (
-		<div className='hamburger-menu'>
-			<div className='menu-secondary-background-color'></div>
-			<div className='menu-layer'>
+		<div ref={(el) => (menu = el)} className='hamburger-menu'>
+			<div
+				ref={(el) => (revealMenuBackground = el)}
+				className='menu-secondary-background-color'></div>
+			<div ref={(el) => (revealMenu = el)} className='menu-layer'>
 				<div className='menu-city-background'></div>
 				<div className='container'>
 					<div className='wrapper'>
 						<div className='menu-links'>
 							<nav>
 								<ul>
-									<li>
-										<Link to='/opportunities'>Oppoturnities</Link>
-									</li>
-									<li>
-										<Link to='/solutions'>Solutions</Link>
-									</li>
-									<li>
-										<Link to='/contact-us'>Contact</Link>
-									</li>
+									{LINKS.map((item, index) => (
+										<li key={item.name} className={`line${index + 1}`}>
+											<Link
+												to={item.to}
+												onMouseEnter={hanldeLinkHover}
+												onMouseOut={hanldeLinkHoverExit}>
+												{item.name}
+											</Link>
+										</li>
+									))}
 								</ul>
 							</nav>
-							<div className='info'>
+							<div ref={(el) => (info = el)} className='info'>
 								<h3>Our Promise</h3>
 								<p>
 									Lorem, ipsum dolor sit amet consectetur adipisicing elit.
@@ -33,11 +92,17 @@ export default function Hamburger() {
 							</div>
 
 							<div className='locations'>
-								Locations:<span>Dalas</span>
-								<span>Austin</span>
-								<span>New York</span>
-								<span>San Francisco</span>
-								<span>Beijing</span>
+								Locations:
+								{CITIES.map((city) => (
+									<span
+										key={city.name}
+										onMouseEnter={() =>
+											handleCityEnter(city.image, '.menu-city-background')
+										}
+										onMouseOut={() => handleCityOut('.menu-city-background')}>
+										{city.name}
+									</span>
+								))}
 							</div>
 						</div>
 					</div>
